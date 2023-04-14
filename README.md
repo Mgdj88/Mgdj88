@@ -4,6 +4,30 @@
     <title>Pick a Tarot Card App</title>
     <style>
         /* Add any custom CSS styling here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: lightgray;
+            text-align: center;
+        }
+
+        h1 {
+            color: darkblue;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #cardDisplay {
+            margin-top: 20px;
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
