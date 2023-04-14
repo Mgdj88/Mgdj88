@@ -3,7 +3,7 @@
 <head>
     <title>Pick a Tarot Card App</title>
     <style>
-        /* Add any custom CSS styling here */
+        /* CSS for tarot card app */
         body {
             font-family: Arial, sans-serif;
             background-color: lightgray;
