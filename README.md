@@ -68,13 +68,4 @@
             const cardDisplay = document.getElementById("cardDisplay");
             const randomIndex = Math.floor(Math.random() * tarotCards.length);
             const card = tarotCards[randomIndex];
-            cardDisplay.textContent = `You have picked the '${card}' card.`;
-        }
-
-        // Function to pick another card
-        function repeat() {
-            pickCard();
-        }
-    </script>
-</body>
-</html>
+            cardDisplay.textContent =
