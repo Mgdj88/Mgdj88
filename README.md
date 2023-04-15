@@ -1,87 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Pick a Tarot Card App</title>
-    <style>
-        /* CSS for tarot card app */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            text-align: center;
-        }
+import random
 
-        h1 {
-            color: #333;
-            margin-top: 40px;
-        }
+# Define a dictionary of tarot cards with their meanings
+tarot_cards = {
+    "The Fool": "Represents spontaneity, new beginnings, and taking risks.",
+    "The Magician": "Symbolizes creativity, power, and manifestation.",
+    "The High Priestess": "Represents intuition, mystery, and the subconscious mind.",
+    "The Empress": "Symbolizes fertility, nurturing, and abundance.",
+    "The Emperor": "Represents authority, stability, and leadership.",
+    "The Hierophant": "Symbolizes tradition, spirituality, and guidance from higher powers.",
+    "The Lovers": "Represents romantic relationships, partnerships, and deep connections.",
+    "The Chariot": "Symbolizes determination, drive, and overcoming obstacles.",
+    "Strength": "Represents inner strength, courage, and perseverance.",
+    "The Hermit": "Symbolizes introspection, solitude, and inner guidance.",
+    "Wheel of Fortune": "Represents cycles, luck, and destiny.",
+    "Justice": "Symbolizes fairness, balance, and moral integrity.",
+    "The Hanged Man": "Represents surrender, letting go, and seeing things from a different perspective.",
+    "Death": "Symbolizes transformation, change, and new beginnings.",
+    "Temperance": "Represents balance, harmony, and moderation.",
+    "The Devil": "Symbolizes temptation, materialism, and bondage.",
+    "The Tower": "Represents sudden upheaval, change, and chaos.",
+    "The Star": "Symbolizes hope, inspiration, and spirituality.",
+    "The Moon": "Represents intuition, emotions, and the subconscious mind.",
+    "The Sun": "Symbolizes vitality, joy, and success.",
+    "Judgment": "Represents rebirth, renewal, and taking responsibility for one's actions.",
+    "The World": "Symbolizes completion, wholeness, and fulfillment."
+}
 
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease-in-out;
-        }
+# Function to pick a random tarot card
+def pick_card():
+    card = random.choice(list(tarot_cards.keys()))
+    meaning = tarot_cards[card]
+    return card, meaning
 
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #cardDisplay {
-            margin-top: 40px;
-            font-size: 24px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cardImage {
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-            display: block;
-        }
-    </style>
-</head>
-<body>
-    <h1>Welcome to the Pick a Tarot Card app!</h1>
-    <button onclick="pickCard()">Press to Pick a Card</button>
-    <button onclick="pickCard()">Pick Another Card</button>
-    <div id="cardDisplay">
-        <img src="" alt="Tarot Card Image" class="cardImage" id="cardImage">
-        <p id="cardDescription"></p>
-    </div>
-
-    <script>
-        // Define an array of tarot cards with images
-        const tarotCards = [
-            {
-                name: "The Fool",
-                description: "Represents spontaneity, new beginnings, and taking risks.",
-                image: "https://example.com/images/fool.jpg"
-            },
-            {
-                name: "The Magician",
-                description: "Symbolizes creativity, power, and manifestation.",
-                image: "https://example.com/images/magician.jpg"
-            },
-            // Add more tarot cards with their descriptions and image URLs
-        ];
-
-        // Function to pick a random tarot card
-        function pickCard() {
-            const cardDisplay = document.getElementById("cardDisplay");
-            const cardImage = document.getElementById("cardImage");
-            const cardDescription = document.getElementById("cardDescription");
-            const randomIndex = Math.floor(Math.random() * tarotCards.length);
-            const card = tarotCards[randomIndex];
-            cardImage.src = card.image;
-            cardImage.alt = card.name;
-            cardDescription.textContent = card.description;
-        }
-    </script>
-</body>
-</html>
+# Game loop
+while True:
+    print("Welcome to the Tarot Card Picking Game!")
+    print("Press 'p' to pick a card or 'q' to quit.")
+    choice = input("Enter your choice: ")
+    if choice == 'p':
+        card, meaning = pick_card()
+        print("You picked the card:", card)
+        print("Meaning:", meaning)
+    elif choice == 'q':
+        print("Thank you for playing! Goodbye!")
+        break
+    else:
+        print("Invalid choice. Please try again.")
