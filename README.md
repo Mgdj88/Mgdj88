@@ -1,50 +1,87 @@
-import tkinter as tk
-import random
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pick a Tarot Card App</title>
+    <style>
+        /* CSS for tarot card app */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
 
-# Define an array of tarot cards
-tarotCards = [
-    "The Fool: Represents spontaneity, new beginnings, and taking risks.",
-    "The Magician: Symbolizes creativity, power, and manifestation.",
-    "The High Priestess: Represents intuition, mystery, and the subconscious mind.",
-    "The Empress: Symbolizes fertility, nurturing, and abundance.",
-    "The Emperor: Represents authority, stability, and leadership.",
-    "The Hierophant: Symbolizes tradition, spirituality, and guidance from higher powers.",
-    "The Lovers: Represents romantic relationships, partnerships, and deep connections.",
-    "The Chariot: Symbolizes determination, drive, and overcoming obstacles.",
-    "Strength: Represents inner strength, courage, and perseverance.",
-    "The Hermit: Symbolizes introspection, solitude, and inner guidance.",
-    "Wheel of Fortune: Represents cycles, luck, and destiny.",
-    "Justice: Symbolizes fairness, balance, and moral integrity.",
-    "The Hanged Man: Represents surrender, letting go, and seeing things from a different perspective.",
-    "Death: Symbolizes transformation, change, and new beginnings.",
-    "Temperance: Represents balance, harmony, and moderation.",
-    "The Devil: Symbolizes temptation, materialism, and bondage.",
-    "The Tower: Represents sudden upheaval, change, and chaos.",
-    "The Star: Symbolizes hope, inspiration, and spirituality.",
-    "The Moon: Represents intuition, emotions, and the subconscious mind.",
-    "The Sun: Symbolizes vitality, joy, and success.",
-    "Judgment: Represents rebirth, renewal, and taking responsibility for one's actions.",
-    "The World: Symbolizes completion, wholeness, and fulfillment."
-]
+        h1 {
+            color: #333;
+            margin-top: 40px;
+        }
 
-# Function to pick a random tarot card
-def pick_card():
-    card_display.config(text=random.choice(tarotCards))
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease-in-out;
+        }
 
-# Create the main window
-root = tk.Tk()
-root.title("Pick a Tarot Card App")
+        button:hover {
+            background-color: #0056b3;
+        }
 
-# Create a label for card display
-card_display = tk.Label(root, text="", wraplength=300, font=("Arial", 16), justify="center")
-card_display.pack(pady=20)
+        #cardDisplay {
+            margin-top: 40px;
+            font-size: 24px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-# Create a "Pick a Card" button
-pick_button = tk.Button(root, text="Press to Pick a Card", command=pick_card)
-pick_button.pack()
+        .cardImage {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Pick a Tarot Card app!</h1>
+    <button onclick="pickCard()">Press to Pick a Card</button>
+    <button onclick="pickCard()">Pick Another Card</button>
+    <div id="cardDisplay">
+        <img src="" alt="Tarot Card Image" class="cardImage" id="cardImage">
+        <p id="cardDescription"></p>
+    </div>
 
-# Create a "Pick Another Card" button
-repeat_button = tk.Button(root, text="Pick Another Card", command=pick_card)
-repeat_button.pack(pady=10)
+    <script>
+        // Define an array of tarot cards with images
+        const tarotCards = [
+            {
+                name: "The Fool",
+                description: "Represents spontaneity, new beginnings, and taking risks.",
+                image: "https://example.com/images/fool.jpg"
+            },
+            {
+                name: "The Magician",
+                description: "Symbolizes creativity, power, and manifestation.",
+                image: "https://example.com/images/magician.jpg"
+            },
+            // Add more tarot cards with their descriptions and image URLs
+        ];
 
-root.mainloop()
+        // Function to pick a random tarot card
+        function pickCard() {
+            const cardDisplay = document.getElementById("cardDisplay");
+            const cardImage = document.getElementById("cardImage");
+            const cardDescription = document.getElementById("cardDescription");
+            const randomIndex = Math.floor(Math.random() * tarotCards.length);
+            const card = tarotCards[randomIndex];
+            cardImage.src = card.image;
+            cardImage.alt = card.name;
+            cardDescription.textContent = card.description;
+        }
+    </script>
+</body>
+</html>
