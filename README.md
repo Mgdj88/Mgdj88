@@ -1,67 +1,81 @@
-Ensure that the display_game_screen(), get_player_bid(), generate_opponents_bids(), play_trick(), determine_winning_card(), update_game_stats(), and game_over() functions are properly defined and implemented to handle the corresponding game mechanics.
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
 
-Make sure that the winning_card.player property is correctly assigned in the determine_winning_card() function or method, so that it can be properly compared in the following conditional statement.
+public class CardGame {
+    private static final String[] SUITS = {"hearts", "diamonds", "clubs", "spades"};
+    private static final String[] RANKS = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+    private static final double COIN_REWARD_WIN = 0.1;
+    private static final double COIN_REWARD_LOSE = 0.01;
 
-Double-check that the game loop logic and conditions in the while loop are properly designed to handle the game flow, including the termination condition for the loop when the game is over.
+    private int players;
+    private ArrayList<String> deck;
+    private int[] playerScores;
 
-Verify that the spade_coins and player_wins variables are correctly updated based on the game mechanics and rules, and that their initial values are appropriately set.
+    public CardGame(int players) {
+        this.players = players;
+        this.deck = new ArrayList<>();
+        this.playerScores = new int[players];
+    }
 
-Consider using proper data types and error handling techniques, such as validating user input, handling exceptions, and managing potential edge cases to ensure the stability and correctness of the code.
+    public void playGame() {
+        Scanner scanner = new Scanner(System.in);
 
-Additionally, make sure that any necessary game assets, such as card images or other graphical elements, are properly loaded and displayed in the display_game_screen() function or method.
+        while (true) {
+            // Deal cards to players
+            Collections.shuffle(deck);
+            ArrayList<String>[] playerHands = new ArrayList[players];
+            for (int i = 0; i < players; i++) {
+                playerHands[i] = new ArrayList<>();
+            }
 
-Finally, thoroughly test the code with different scenarios and edge cases to identify and fix any potential issues or bugs.
-# Constants
-SUITS = ['hearts', 'diamonds', 'clubs', 'spades']
-RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-COIN_REWARD_WIN = 0.1
-COIN_REWARD_LOSE = 0.01
+            for (int i = 0; i < deck.size(); i++) {
+                playerHands[i % players].add(deck.get(i));
+            }
 
-# Initialize game state
-players = 4
-deck = [(rank, suit) for rank in RANKS for suit in SUITS]
-random.shuffle(deck)
-player_scores = [0] * players
+            // Bidding phase
+            int[] bids = new int[players];
+            for (int i = 0; i < players; i++) {
+                System.out.println("Player " + (i + 1) + " hand: " + playerHands[i]);
+                System.out.print("Player " + (i + 1) + ", enter your bid (0-13): ");
+                bids[i] = scanner.nextInt();
+            }
 
-# Game Loop
-while True:
-    # Deal cards to players
-    player_hands = [[] for _ in range(players)]
-    for i in range(len(deck)):
-        player_hands[i % players].append(deck.pop())
+            // Trick-taking phase
+            int[] tricksWon = new int[players];
+            for (int trick = 0; trick < 13; trick++) {
+                String[] trickCards = new String[players];
+                for (int i = 0; i < players; i++) {
+                    System.out.print("Player " + (i + 1) + ", play a card from your hand: ");
+                    trickCards[i] = scanner.next();
+                    playerHands[i].remove(trickCards[i]);
+                }
 
-    # Bidding phase
-    bids = [0] * players
-    for i in range(players):
-        print("Player", i+1, "hand:", player_hands[i])
-        bids[i] = int(input("Player " + str(i+1) + ", enter your bid (0-13): "))
+                // Determine trick winner
+                String winningCard = trickCards[0];
+                int winningPlayer = 0;
+                for (int i = 1; i < players; i++) {
+                    if (compareCards(trickCards[i], winningCard) > 0) {
+                        winningCard = trickCards[i];
+                        winningPlayer = i;
+                    }
+                }
+                tricksWon[winningPlayer]++;
+                System.out.println("Trick won by Player " + (winningPlayer + 1));
+            }
 
-    # Trick-taking phase
-    tricks_won = [0] * players
-    for _ in range(13):
-        trick = []
-        for i in range(players):
-            card = input("Player " + str(i+1) + ", play a card from your hand: ")
-            trick.append(card)
-            player_hands[i].remove(card)
+            // Update player scores and virtual currency rewards
+            for (int i = 0; i < players; i++) {
+                if (tricksWon[i] >= bids[i]) {
+                    playerScores[i] += bids[i] + COIN_REWARD_WIN;
+                } else {
+                    playerScores[i] += tricksWon[i] + COIN_REWARD_LOSE;
+                }
+            }
 
-        # Determine trick winner
-        winning_card = max(trick, key=lambda x: (RANKS.index(x[0]), SUITS.index(x[1])))
-        winning_player = trick.index(winning_card)
-        tricks_won[winning_player] += 1
-        print("Trick won by Player", winning_player+1)
-
-    # Update player scores and virtual currency rewards
-    for i in range(players):
-        if tricks_won[i] >= bids[i]:
-            player_scores[i] += bids[i] + COIN_REWARD_WIN
-        else:
-            player_scores[i] += tricks_won[i] + COIN_REWARD_LOSE
-
-    # End of round
-    print("Round scores: ", player_scores)
-    play_again = input("Do you want to play again? (y/n): ")
-    if play_again.lower() != 'y':
-        break
-
-print("Game over!")
+            // End of round
+            System.out.println("Round scores: " + Arrays.toString(playerScores));
+            System.out.print("Do you want to play again? (y/n): ");
+            String playAgain = scanner.next();
+            if (!playAgain.toLowerCase().equals("y
