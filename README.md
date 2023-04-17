@@ -1,81 +1,81 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Scanner;
+import random
 
-public class CardGame {
-    private static final String[] SUITS = {"hearts", "diamonds", "clubs", "spades"};
-    private static final String[] RANKS = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
-    private static final double COIN_REWARD_WIN = 0.1;
-    private static final double COIN_REWARD_LOSE = 0.01;
+# Constants
+RANKS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
+SUITS = ['C', 'D', 'H', 'S']
+TRUMP_SUITS = ['M', 'O']
+PLAYERS = ['Player 1', 'Player 2', 'Player 3', 'Player 4']
 
-    private int players;
-    private ArrayList<String> deck;
-    private int[] playerScores;
+# Deck of cards
+DECK = [rank + suit for suit in SUITS for rank in RANKS] + [rank + trump for trump in TRUMP_SUITS for rank in RANKS]
 
-    public CardGame(int players) {
-        this.players = players;
-        this.deck = new ArrayList<>();
-        this.playerScores = new int[players];
-    }
+# Game state
+player_hands = {player: [] for player in PLAYERS}
+trick = []
+trump_suit = None
 
-    public void playGame() {
-        Scanner scanner = new Scanner(System.in);
+def deal_cards():
+    """Deal cards to players."""
+    random.shuffle(DECK)
+    for i in range(len(DECK)):
+        player_hands[PLAYERS[i % len(PLAYERS)]].append(DECK[i])
 
-        while (true) {
-            // Deal cards to players
-            Collections.shuffle(deck);
-            ArrayList<String>[] playerHands = new ArrayList[players];
-            for (int i = 0; i < players; i++) {
-                playerHands[i] = new ArrayList<>();
-            }
+def play_trick(leading_player):
+    """Play a trick."""
+    trick.clear()
+    for i in range(len(PLAYERS)):
+        player = PLAYERS[(PLAYERS.index(leading_player) + i) % len(PLAYERS)]
+        card = get_played_card(player)
+        trick.append(card)
 
-            for (int i = 0; i < deck.size(); i++) {
-                playerHands[i % players].add(deck.get(i));
-            }
+def get_played_card(player):
+    """Get the card played by a player."""
+    valid_cards = get_valid_cards(player)
+    print(f"{player}, it's your turn to play. Valid cards: {valid_cards}")
+    while True:
+        card = input("Enter card (e.g. '2C' for 2 of Clubs): ").upper()
+        if card in valid_cards:
+            player_hands[player].remove(card)
+            return card
+        else:
+            print("Invalid card. Please choose a valid card.")
 
-            // Bidding phase
-            int[] bids = new int[players];
-            for (int i = 0; i < players; i++) {
-                System.out.println("Player " + (i + 1) + " hand: " + playerHands[i]);
-                System.out.print("Player " + (i + 1) + ", enter your bid (0-13): ");
-                bids[i] = scanner.nextInt();
-            }
+def get_valid_cards(player):
+    """Get the valid cards that a player can play."""
+    valid_cards = []
+    if not trick:
+        valid_cards = player_hands[player]
+    else:
+        leading_suit = trick[0][1]
+        has_suit = any(card[1] == leading_suit for card in player_hands[player])
+        if has_suit:
+            valid_cards = [card for card in player_hands[player] if card[1] == leading_suit]
+        else:
+            valid_cards = player_hands[player]
+    return valid_cards
 
-            // Trick-taking phase
-            int[] tricksWon = new int[players];
-            for (int trick = 0; trick < 13; trick++) {
-                String[] trickCards = new String[players];
-                for (int i = 0; i < players; i++) {
-                    System.out.print("Player " + (i + 1) + ", play a card from your hand: ");
-                    trickCards[i] = scanner.next();
-                    playerHands[i].remove(trickCards[i]);
-                }
+def determine_trick_winner():
+    """Determine the winner of a trick."""
+    leading_suit = trick[0][1]
+    highest_card = None
+    winning_player = None
+    for card in trick:
+        if card[1] == leading_suit and (highest_card is None or card > highest_card):
+            highest_card = card
+            winning_player = PLAYERS[trick.index(card)]
+    return winning_player
 
-                // Determine trick winner
-                String winningCard = trickCards[0];
-                int winningPlayer = 0;
-                for (int i = 1; i < players; i++) {
-                    if (compareCards(trickCards[i], winningCard) > 0) {
-                        winningCard = trickCards[i];
-                        winningPlayer = i;
-                    }
-                }
-                tricksWon[winningPlayer]++;
-                System.out.println("Trick won by Player " + (winningPlayer + 1));
-            }
+def play_game():
+    """Play a game of Spades with tarot cards."""
+    print("Welcome to Spades with Tarot cards!")
+    deal_cards()
+    print("Cards have been dealt.")
+    print("Trump suit is determined by the highest ranking Major Arcana card in your hand.")
+    trump_suit = determine_trump_suit()
+    print(f"Trump suit is: {trump_suit}")
 
-            // Update player scores and virtual currency rewards
-            for (int i = 0; i < players; i++) {
-                if (tricksWon[i] >= bids[i]) {
-                    playerScores[i] += bids[i] + COIN_REWARD_WIN;
-                } else {
-                    playerScores[i] += tricksWon[i] + COIN_REWARD_LOSE;
-                }
-            }
-
-            // End of round
-            System.out.println("Round scores: " + Arrays.toString(playerScores));
-            System.out.print("Do you want to play again? (y/n): ");
-            String playAgain = scanner.next();
-            if (!playAgain.toLowerCase().equals("y
+    leading_player = PLAYERS[0]
+    while len(player_hands[leading_player]) > 0:
+        play_trick(leading_player)
+        trick_winner = determine_trick_winner()
+        print(f"{trick_winner}
